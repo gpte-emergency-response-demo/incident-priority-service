@@ -12,12 +12,11 @@ then
     insert ( new AveragePriority() );
 end
 
-rule "Create incident priority fact when incident is reported"
+rule "Create incident priority fact when incident cannot be assigned"
 when
-    $e: IncidentReportedEvent( $i: incident)
+    $e: IncidentAssignmentEvent( $i: incident, assigned == false )
     not ( IncidentPriority( incident == $i ) )
 then
-    retract( $e )
     insert( new IncidentPriority($i) );
 end
 

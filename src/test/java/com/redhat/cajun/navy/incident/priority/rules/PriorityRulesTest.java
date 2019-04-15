@@ -11,7 +11,6 @@ import java.util.stream.StreamSupport;
 import com.redhat.cajun.navy.incident.priority.rules.model.AveragePriority;
 import com.redhat.cajun.navy.incident.priority.rules.model.IncidentAssignmentEvent;
 import com.redhat.cajun.navy.incident.priority.rules.model.IncidentPriority;
-import com.redhat.cajun.navy.incident.priority.rules.model.IncidentReportedEvent;
 import org.drools.core.io.impl.ClassPathResource;
 import org.junit.After;
 import org.junit.Before;
@@ -58,7 +57,7 @@ public class PriorityRulesTest {
 
     @Test
     public void testIncidentPriorityFact() {
-        session.insert(new IncidentReportedEvent("incident123"));
+        session.insert(new IncidentAssignmentEvent("incident123", false));
         session.fireAllRules();
         QueryResults results = session.getQueryResults("incidentPriority", "incident123");
         assertThat(results.size(), equalTo(1));
@@ -66,8 +65,6 @@ public class PriorityRulesTest {
 
     @Test
     public void testIncreaseIncidentPriority() {
-        session.insert(new IncidentReportedEvent("incident123"));
-        session.fireAllRules();
         session.insert(new IncidentAssignmentEvent("incident123", false));
         session.fireAllRules();
         QueryResults results = session.getQueryResults("incidentPriority", "incident123");
@@ -82,8 +79,6 @@ public class PriorityRulesTest {
 
     @Test
     public void testRetractIncidentPriority() {
-        session.insert(new IncidentReportedEvent("incident123"));
-        session.fireAllRules();
         session.insert(new IncidentAssignmentEvent("incident123", false));
         session.fireAllRules();
         session.insert(new IncidentAssignmentEvent("incident123", true));
@@ -94,7 +89,7 @@ public class PriorityRulesTest {
 
     @Test
     public void testAveragePriority1() {
-        session.insert(new IncidentReportedEvent("incident123"));
+        session.insert(new IncidentAssignmentEvent("incident123", false));
         session.fireAllRules();
         QueryResults results = session.getQueryResults("averagePriority");
         assertThat(results.size(), equalTo(1));
@@ -103,13 +98,11 @@ public class PriorityRulesTest {
         assertThat(row, notNullValue());
         assertThat(row.get("averagePriority"), notNullValue());
         assertThat(row.get("averagePriority"), is(instanceOf(AveragePriority.class)));
-        assertThat(((AveragePriority)row.get("averagePriority")).getAveragePriority(), equalTo(0.0));
+        assertThat(((AveragePriority)row.get("averagePriority")).getAveragePriority(), equalTo(1.0));
     }
 
     @Test
     public void testAveragePriority2() {
-        session.insert(new IncidentReportedEvent("incident123"));
-        session.fireAllRules();
         session.insert(new IncidentAssignmentEvent("incident123", false));
         session.fireAllRules();
         QueryResults results = session.getQueryResults("averagePriority");
@@ -124,8 +117,6 @@ public class PriorityRulesTest {
 
     @Test
     public void testAveragePriority3() {
-        session.insert(new IncidentReportedEvent("incident123"));
-        session.fireAllRules();
         session.insert(new IncidentAssignmentEvent("incident123", false));
         session.fireAllRules();
         session.insert(new IncidentAssignmentEvent("incident123", true));
@@ -142,11 +133,7 @@ public class PriorityRulesTest {
 
     @Test
     public void testAveragePriority4() {
-        session.insert(new IncidentReportedEvent("incident123"));
-        session.fireAllRules();
         session.insert(new IncidentAssignmentEvent("incident123", false));
-        session.fireAllRules();
-        session.insert(new IncidentReportedEvent("incident456"));
         session.fireAllRules();
         session.insert(new IncidentAssignmentEvent("incident456", false));
         session.fireAllRules();
@@ -162,11 +149,7 @@ public class PriorityRulesTest {
 
     @Test
     public void testAveragePriority5() {
-        session.insert(new IncidentReportedEvent("incident123"));
-        session.fireAllRules();
         session.insert(new IncidentAssignmentEvent("incident123", false));
-        session.fireAllRules();
-        session.insert(new IncidentReportedEvent("incident456"));
         session.fireAllRules();
         session.insert(new IncidentAssignmentEvent("incident456", false));
         session.fireAllRules();
@@ -184,11 +167,7 @@ public class PriorityRulesTest {
 
     @Test
     public void testAveragePriority6() {
-        session.insert(new IncidentReportedEvent("incident123"));
-        session.fireAllRules();
         session.insert(new IncidentAssignmentEvent("incident123", false));
-        session.fireAllRules();
-        session.insert(new IncidentReportedEvent("incident456"));
         session.fireAllRules();
         session.insert(new IncidentAssignmentEvent("incident456", false));
         session.fireAllRules();
