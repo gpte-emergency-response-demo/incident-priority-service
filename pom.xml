@@ -15,6 +15,7 @@
     <version.vertx>3.6.3.redhat-00009</version.vertx>
     <version.fabric8-maven-plugin>3.5.41</version.fabric8-maven-plugin>
     <version.vertx-maven-plugin>1.0.18</version.vertx-maven-plugin>
+    <version.rhdm>7.18.0.Final-redhat-00002</version.rhdm>
     <vertx.verticle>com.redhat.cajun.navy.incident.priority.MainVerticle</vertx.verticle>
   </properties>
   <dependencyManagement>
@@ -80,6 +81,16 @@
       <groupId>net.logstash.logback</groupId>
       <artifactId>logstash-logback-encoder</artifactId>
       <version>5.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.drools</groupId>
+      <artifactId>drools-compiler</artifactId>
+      <version>${version.rhdm}</version>
+    </dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.12</version>
     </dependency>
   </dependencies>
   <build>

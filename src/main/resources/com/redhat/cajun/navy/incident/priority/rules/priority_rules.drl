@@ -1,0 +1,82 @@
+package com.redhat.cajun.navy.incident.priority.rules
+
+import com.redhat.cajun.navy.incident.priority.rules.model.IncidentAssignmentEvent;
+import com.redhat.cajun.navy.incident.priority.rules.model.IncidentReportedEvent;
+import com.redhat.cajun.navy.incident.priority.rules.model.IncidentPriority;
+import com.redhat.cajun.navy.incident.priority.rules.model.AveragePriority
+
+rule "Create AveragePriority fact"
+when
+    not ( AveragePriority() )
+then
+    insert ( new AveragePriority() );
+end
+
+rule "Create incident priority fact when incident is reported"
+when
+    $e: IncidentReportedEvent( $i: incident)
+    not ( IncidentPriority( incident == $i ) )
+then
+    retract( $e )
+    insert( new IncidentPriority($i) );
+end
+
+rule "Increase priority by one when incident cannot be assigned"
+when
+    $e: IncidentAssignmentEvent( $i: incident, assigned == false )
+    $p: IncidentPriority( incident == $i )
+    $a: AveragePriority()
+then
+    modify ( $p ) {
+        setPriority( $p.getPriority() + 1 )
+    }
+    modify ( $a ) {
+        setNeedsEvaluation(true)
+    }
+end
+
+rule "Retract incident priority when incident has been assigned"
+when
+    $e: IncidentAssignmentEvent( $i: incident, assigned == true )
+    $p: IncidentPriority( incident == $i )
+    $a: AveragePriority()
+then
+    retract ( $p );
+    modify ( $a ) {
+        setNeedsEvaluation(true)
+    }
+end
+
+rule "Average Priority"
+when
+    $e: IncidentAssignmentEvent()
+    $a: AveragePriority( needsEvaluation == true )
+    accumulate( IncidentPriority( $p: priority );  $avg: average( $p ) )
+then
+    retract ( $e )
+    modify ( $a ) {
+        setNeedsEvaluation(false),
+        setAveragePriority($avg)
+    }
+end
+
+rule "Average Priority when no IncidentPriority"
+when
+    $e: IncidentAssignmentEvent()
+    $a: AveragePriority( needsEvaluation == true )
+    not ( IncidentPriority() )
+then
+    retract ( $e )
+    modify ( $a ) {
+        setNeedsEvaluation(false),
+        setAveragePriority(0.0)
+    }
+end
+
+query "incidentPriority" (String i)
+   incidentPriority : IncidentPriority( incident == i )
+end
+
+query "averagePriority"
+   averagePriority : AveragePriority( )
+end
