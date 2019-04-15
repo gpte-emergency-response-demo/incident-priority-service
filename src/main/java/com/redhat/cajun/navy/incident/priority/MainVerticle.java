@@ -39,7 +39,9 @@ public class MainVerticle extends AbstractVerticle {
         return retriever.rxGetConfig()
                 .flatMapCompletable(json -> {
                     JsonObject http = json.getJsonObject("http");
-                    return vertx.rxDeployVerticle(RestApiVerticle::new, new DeploymentOptions().setConfig(http)).ignoreElement();
+                    JsonObject kafka = json.getJsonObject("kafka");
+                    return vertx.rxDeployVerticle(RestApiVerticle::new, new DeploymentOptions().setConfig(http)).ignoreElement()
+                            .andThen(vertx.rxDeployVerticle(MessageConsumerVerticle::new, new DeploymentOptions().setConfig(kafka)).ignoreElement());
                 });
     }
 }

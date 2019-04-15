@@ -1,0 +1,8 @@
+http:
+  port: 8080
+kafka:
+  bootstrap:
+    servers: localhost:9092
+  groupId: incident-priority
+  topic:
+    incident-assignment-event: topic-incident-event
