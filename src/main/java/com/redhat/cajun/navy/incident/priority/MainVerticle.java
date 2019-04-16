@@ -41,7 +41,8 @@ public class MainVerticle extends AbstractVerticle {
                     JsonObject http = json.getJsonObject("http");
                     JsonObject kafka = json.getJsonObject("kafka");
                     return vertx.rxDeployVerticle(RestApiVerticle::new, new DeploymentOptions().setConfig(http)).ignoreElement()
-                            .andThen(vertx.rxDeployVerticle(MessageConsumerVerticle::new, new DeploymentOptions().setConfig(kafka)).ignoreElement());
+                            .andThen(vertx.rxDeployVerticle(MessageConsumerVerticle::new, new DeploymentOptions().setConfig(kafka)).ignoreElement())
+                            .andThen(vertx.rxDeployVerticle(RulesVerticle::new, new DeploymentOptions()).ignoreElement());
                 });
     }
 }

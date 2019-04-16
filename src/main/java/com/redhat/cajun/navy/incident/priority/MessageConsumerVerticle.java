@@ -56,7 +56,7 @@ public class MessageConsumerVerticle extends AbstractVerticle {
             log.info("Consumed '" + messageType + "' message for incident '" + incidentId + "'. Topic: " + msg.topic()
                     + " ,  partition: " + msg.partition() + ", offset: " + msg.offset());
 
-            vertx.eventBus().send("incident-assignment-event", message);
+            vertx.eventBus().send("incident-assignment-event", body);
 
         } finally {
             //commit message

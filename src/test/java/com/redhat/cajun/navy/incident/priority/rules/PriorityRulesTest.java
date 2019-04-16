@@ -69,8 +69,7 @@ public class PriorityRulesTest {
         session.fireAllRules();
         QueryResults results = session.getQueryResults("incidentPriority", "incident123");
         assertThat(results.size(), equalTo(1));
-        Iterable<QueryResultsRow> iterable = () -> results.iterator();
-        QueryResultsRow row = StreamSupport.stream(iterable.spliterator(), false).findFirst().orElse(null);
+        QueryResultsRow row = StreamSupport.stream(results.spliterator(), false).findFirst().orElse(null);
         assertThat(row, notNullValue());
         assertThat(row.get("incidentPriority"), notNullValue());
         assertThat(row.get("incidentPriority"), is(instanceOf(IncidentPriority.class)));
@@ -93,8 +92,7 @@ public class PriorityRulesTest {
         session.fireAllRules();
         QueryResults results = session.getQueryResults("averagePriority");
         assertThat(results.size(), equalTo(1));
-        Iterable<QueryResultsRow> iterable = () -> results.iterator();
-        QueryResultsRow row = StreamSupport.stream(iterable.spliterator(), false).findFirst().orElse(null);
+        QueryResultsRow row = StreamSupport.stream(results.spliterator(), false).findFirst().orElse(null);
         assertThat(row, notNullValue());
         assertThat(row.get("averagePriority"), notNullValue());
         assertThat(row.get("averagePriority"), is(instanceOf(AveragePriority.class)));
@@ -107,8 +105,7 @@ public class PriorityRulesTest {
         session.fireAllRules();
         QueryResults results = session.getQueryResults("averagePriority");
         assertThat(results.size(), equalTo(1));
-        Iterable<QueryResultsRow> iterable = () -> results.iterator();
-        QueryResultsRow row = StreamSupport.stream(iterable.spliterator(), false).findFirst().orElse(null);
+        QueryResultsRow row = StreamSupport.stream(results.spliterator(), false).findFirst().orElse(null);
         assertThat(row, notNullValue());
         assertThat(row.get("averagePriority"), notNullValue());
         assertThat(row.get("averagePriority"), is(instanceOf(AveragePriority.class)));
@@ -123,8 +120,7 @@ public class PriorityRulesTest {
         session.fireAllRules();
         QueryResults results = session.getQueryResults("averagePriority");
         assertThat(results.size(), equalTo(1));
-        Iterable<QueryResultsRow> iterable = () -> results.iterator();
-        QueryResultsRow row = StreamSupport.stream(iterable.spliterator(), false).findFirst().orElse(null);
+        QueryResultsRow row = StreamSupport.stream(results.spliterator(), false).findFirst().orElse(null);
         assertThat(row, notNullValue());
         assertThat(row.get("averagePriority"), notNullValue());
         assertThat(row.get("averagePriority"), is(instanceOf(AveragePriority.class)));
@@ -139,8 +135,7 @@ public class PriorityRulesTest {
         session.fireAllRules();
         QueryResults results = session.getQueryResults("averagePriority");
         assertThat(results.size(), equalTo(1));
-        Iterable<QueryResultsRow> iterable = () -> results.iterator();
-        QueryResultsRow row = StreamSupport.stream(iterable.spliterator(), false).findFirst().orElse(null);
+        QueryResultsRow row = StreamSupport.stream(results.spliterator(), false).findFirst().orElse(null);
         assertThat(row, notNullValue());
         assertThat(row.get("averagePriority"), notNullValue());
         assertThat(row.get("averagePriority"), is(instanceOf(AveragePriority.class)));
@@ -157,8 +152,7 @@ public class PriorityRulesTest {
         session.fireAllRules();
         QueryResults results = session.getQueryResults("averagePriority");
         assertThat(results.size(), equalTo(1));
-        Iterable<QueryResultsRow> iterable = () -> results.iterator();
-        QueryResultsRow row = StreamSupport.stream(iterable.spliterator(), false).findFirst().orElse(null);
+        QueryResultsRow row = StreamSupport.stream(results.spliterator(), false).findFirst().orElse(null);
         assertThat(row, notNullValue());
         assertThat(row.get("averagePriority"), notNullValue());
         assertThat(row.get("averagePriority"), is(instanceOf(AveragePriority.class)));
@@ -177,8 +171,7 @@ public class PriorityRulesTest {
         session.fireAllRules();
         QueryResults results = session.getQueryResults("averagePriority");
         assertThat(results.size(), equalTo(1));
-        Iterable<QueryResultsRow> iterable = () -> results.iterator();
-        QueryResultsRow row = StreamSupport.stream(iterable.spliterator(), false).findFirst().orElse(null);
+        QueryResultsRow row = StreamSupport.stream(results.spliterator(), false).findFirst().orElse(null);
         assertThat(row, notNullValue());
         assertThat(row.get("averagePriority"), notNullValue());
         assertThat(row.get("averagePriority"), is(instanceOf(AveragePriority.class)));

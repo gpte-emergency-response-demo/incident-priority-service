@@ -116,6 +116,14 @@
             <goals>
               <goal>package</goal>
             </goals>
+            <configuration>
+              <archive>
+                <fileCombinationPatterns>
+                  <pattern>META-INF/kie.conf</pattern>
+                  <pattern>META-INF/services/*</pattern>
+                </fileCombinationPatterns>
+              </archive>
+            </configuration>
           </execution>
         </executions>
       </plugin>
