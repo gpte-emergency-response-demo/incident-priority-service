@@ -20,14 +20,14 @@ public class MessageConsumerVerticle extends AbstractVerticle {
     @Override
     public Completable rxStart() {
         Map<String, String> kafkaConfig = new HashMap<>();
-        kafkaConfig.put("bootstrap.servers", config().getString("bootstrap.servers"));
+        kafkaConfig.put("bootstrap.servers", config().getString("bootstrap-servers"));
         kafkaConfig.put("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
         kafkaConfig.put("value.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
-        kafkaConfig.put("group.id", config().getString("groupid"));
+        kafkaConfig.put("group.id", config().getString("group-id"));
         kafkaConfig.put("enable.auto.commit", "false");
         kafkaConsumer = KafkaConsumer.create(vertx, kafkaConfig);
         kafkaConsumer.handler(this::handleMessage);
-        kafkaConsumer.subscribe(config().getString("topic.incident-assignment-event"));
+        kafkaConsumer.subscribe(config().getString("topic-incident-assignment-event"));
 
         return Completable.complete();
     }
