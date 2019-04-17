@@ -1,5 +1,12 @@
 package com.redhat.cajun.navy.incident.priority;
 
+import com.codahale.metrics.MetricRegistry;
+import com.codahale.metrics.SharedMetricRegistries;
+import io.prometheus.client.CollectorRegistry;
+import io.prometheus.client.dropwizard.DropwizardExports;
+import io.prometheus.client.hotspot.MemoryPoolsExports;
+import io.prometheus.client.hotspot.StandardExports;
+import io.prometheus.client.vertx.MetricsHandler;
 import io.reactivex.Completable;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.healthchecks.Status;
@@ -18,6 +25,14 @@ public class RestApiVerticle extends AbstractVerticle {
     private Completable initializeHttpServer(JsonObject config) {
 
         Router router = Router.router(vertx);
+
+        // Metrics
+        MetricRegistry metricRegistry = SharedMetricRegistries.getOrCreate("prometheus");
+        CollectorRegistry registry = CollectorRegistry.defaultRegistry;
+        registry.register(new DropwizardExports(metricRegistry));
+        new StandardExports().register(registry);
+        new MemoryPoolsExports().register(registry);
+        router.get("/metrics").handler(event -> new MetricsHandler().handle(event.getDelegate()));
 
         HealthCheckHandler healthCheckHandler = HealthCheckHandler.create(vertx)
                 .register("health", f -> f.complete(Status.OK()));

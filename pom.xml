@@ -16,6 +16,7 @@
     <version.fabric8-maven-plugin>3.5.41</version.fabric8-maven-plugin>
     <version.vertx-maven-plugin>1.0.18</version.vertx-maven-plugin>
     <version.rhdm>7.18.0.Final-redhat-00002</version.rhdm>
+    <version.prometheus>0.0.23</version.prometheus>
     <vertx.verticle>com.redhat.cajun.navy.incident.priority.MainVerticle</vertx.verticle>
   </properties>
   <dependencyManagement>
@@ -67,6 +68,25 @@
           <artifactId>slf4j-log4j12</artifactId>
         </exclusion>
       </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>io.vertx</groupId>
+      <artifactId>vertx-dropwizard-metrics</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.prometheus</groupId>
+      <artifactId>simpleclient_vertx</artifactId>
+      <version>${version.prometheus}</version>
+    </dependency>
+    <dependency>
+      <groupId>io.prometheus</groupId>
+      <artifactId>simpleclient_dropwizard</artifactId>
+      <version>${version.prometheus}</version>
+    </dependency>
+    <dependency>
+      <groupId>io.prometheus</groupId>
+      <artifactId>simpleclient_hotspot</artifactId>
+      <version>${version.prometheus}</version>
     </dependency>
     <dependency>
       <groupId>commons-io</groupId>
