@@ -42,6 +42,8 @@ public class RulesVerticle extends AbstractVerticle {
             return Completable.error(e);
         }
         ksession = kbase.newKieSession();
+        Logger logger = LoggerFactory.getLogger("PriorityRules");
+        ksession.setGlobal("logger", logger);
 
         vertx.eventBus().consumer("incident-assignment-event", this::assignmentEvent);
         vertx.eventBus().consumer("incident-priority", this::incidentPriority);

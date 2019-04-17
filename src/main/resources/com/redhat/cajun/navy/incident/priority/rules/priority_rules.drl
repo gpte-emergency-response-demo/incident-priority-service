@@ -3,7 +3,9 @@ package com.redhat.cajun.navy.incident.priority.rules
 import com.redhat.cajun.navy.incident.priority.rules.model.IncidentAssignmentEvent;
 import com.redhat.cajun.navy.incident.priority.rules.model.IncidentReportedEvent;
 import com.redhat.cajun.navy.incident.priority.rules.model.IncidentPriority;
-import com.redhat.cajun.navy.incident.priority.rules.model.AveragePriority
+import com.redhat.cajun.navy.incident.priority.rules.model.AveragePriority;
+
+global org.slf4j.Logger logger;
 
 rule "Create AveragePriority fact"
 when
@@ -17,6 +19,7 @@ when
     $e: IncidentAssignmentEvent( $i: incident, assigned == false )
     not ( IncidentPriority( incident == $i ) )
 then
+    logger.debug($i + " : " + drools.getRule().getName());
     insert( new IncidentPriority($i) );
 end
 
@@ -26,12 +29,16 @@ when
     $p: IncidentPriority( incident == $i )
     $a: AveragePriority()
 then
+    logger.debug($i + " : " + drools.getRule().getName());
     modify ( $p ) {
         setPriority( $p.getPriority() + 1 )
     }
     modify ( $a ) {
         setNeedsEvaluation(true)
     }
+    retract( $e );
+    logger.debug($i + " : Priority = " + $p.getPriority());
+
 end
 
 rule "Retract incident priority when incident has been assigned"
@@ -40,7 +47,9 @@ when
     $p: IncidentPriority( incident == $i )
     $a: AveragePriority()
 then
+    logger.debug($i + " : " + drools.getRule().getName());
     retract ( $p );
+    retract ( $e );
     modify ( $a ) {
         setNeedsEvaluation(true)
     }
@@ -48,28 +57,27 @@ end
 
 rule "Average Priority"
 when
-    $e: IncidentAssignmentEvent()
     $a: AveragePriority( needsEvaluation == true )
+    IncidentPriority()
     accumulate( IncidentPriority( $p: priority );  $avg: average( $p ) )
 then
-    retract ( $e )
     modify ( $a ) {
         setNeedsEvaluation(false),
         setAveragePriority($avg)
     }
+    logger.debug("Average Priority: " + $a.getAveragePriority());
 end
 
 rule "Average Priority when no IncidentPriority"
 when
-    $e: IncidentAssignmentEvent()
     $a: AveragePriority( needsEvaluation == true )
     not ( IncidentPriority() )
 then
-    retract ( $e )
     modify ( $a ) {
         setNeedsEvaluation(false),
         setAveragePriority(0.0)
     }
+    logger.debug("Average Priority: " + $a.getAveragePriority());
 end
 
 query "incidentPriority" (String i)

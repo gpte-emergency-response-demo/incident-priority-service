@@ -29,6 +29,8 @@ import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
 import org.kie.api.runtime.rule.QueryResults;
 import org.kie.api.runtime.rule.QueryResultsRow;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class PriorityRulesTest {
 
@@ -44,8 +46,8 @@ public class PriorityRulesTest {
     @Before
     public void setupTest() {
         session = kieBase.newKieSession();
-        //rulesFired = new RulesFiredAgendaEventListener();
-        //session.addEventListener(rulesFired);
+        Logger logger = LoggerFactory.getLogger("PriorityRules");
+        session.setGlobal("logger", logger);
     }
 
     @After
