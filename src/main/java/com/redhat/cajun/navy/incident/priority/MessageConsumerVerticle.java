@@ -19,17 +19,20 @@ public class MessageConsumerVerticle extends AbstractVerticle {
 
     @Override
     public Completable rxStart() {
-        Map<String, String> kafkaConfig = new HashMap<>();
-        kafkaConfig.put("bootstrap.servers", config().getString("bootstrap-servers"));
-        kafkaConfig.put("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
-        kafkaConfig.put("value.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
-        kafkaConfig.put("group.id", config().getString("group-id"));
-        kafkaConfig.put("enable.auto.commit", "false");
-        kafkaConsumer = KafkaConsumer.create(vertx, kafkaConfig);
-        kafkaConsumer.handler(this::handleMessage);
-        kafkaConsumer.subscribe(config().getString("topic-incident-assignment-event"));
 
-        return Completable.complete();
+        return Completable.fromMaybe(vertx.rxExecuteBlocking(future -> {
+            Map<String, String> kafkaConfig = new HashMap<>();
+            kafkaConfig.put("bootstrap.servers", config().getString("bootstrap-servers"));
+            kafkaConfig.put("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
+            kafkaConfig.put("value.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
+            kafkaConfig.put("group.id", config().getString("group-id"));
+            kafkaConfig.put("auto.offset.reset", "earliest");
+            kafkaConfig.put("enable.auto.commit", "false");
+            kafkaConsumer = KafkaConsumer.create(vertx, kafkaConfig);
+            kafkaConsumer.handler(this::handleMessage);
+            kafkaConsumer.subscribe(config().getString("topic-incident-assignment-event"));
+            future.complete();
+        }));
     }
 
     private void handleMessage(KafkaConsumerRecord<String, String> msg) {
