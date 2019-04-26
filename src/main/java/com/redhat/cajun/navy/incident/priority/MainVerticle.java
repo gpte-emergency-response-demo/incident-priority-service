@@ -4,9 +4,14 @@ import io.reactivex.Completable;
 import io.vertx.config.ConfigRetrieverOptions;
 import io.vertx.config.ConfigStoreOptions;
 import io.vertx.core.DeploymentOptions;
+import io.vertx.core.VertxOptions;
 import io.vertx.core.json.JsonObject;
+import io.vertx.micrometer.MicrometerMetricsOptions;
+import io.vertx.micrometer.VertxPrometheusOptions;
 import io.vertx.reactivex.config.ConfigRetriever;
 import io.vertx.reactivex.core.AbstractVerticle;
+import io.vertx.reactivex.core.Vertx;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,6 +40,13 @@ public class MainVerticle extends AbstractVerticle {
             options.addStore(localStore);
         }
 
+        // Metrics
+        Vertx vertx = Vertx.vertx(new VertxOptions().setMetricsOptions(
+            new MicrometerMetricsOptions()
+                    .setPrometheusOptions(new VertxPrometheusOptions().setEnabled(true))
+                    .setJvmMetricsEnabled(true)
+                    .setEnabled(true)));
+        
         ConfigRetriever retriever = ConfigRetriever.create(vertx, options);
         return retriever.rxGetConfig()
                 .flatMapCompletable(json -> {

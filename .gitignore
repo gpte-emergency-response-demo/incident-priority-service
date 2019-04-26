@@ -48,6 +48,9 @@ cmake-build-debug/
 
 ## Plugin-specific files:
 
+# vscode
+.vscode
+
 # IntelliJ
 /out/
 
