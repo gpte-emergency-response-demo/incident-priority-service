@@ -40,18 +40,32 @@ public class RulesVerticle extends AbstractVerticle {
         return Completable.fromMaybe(vertx.<Void>rxExecuteBlocking(future -> {
             try {
                 kbase = setupKieBase("com/redhat/cajun/navy/incident/priority/rules/priority_rules.drl");
-                ksession = kbase.newKieSession();
-                Logger logger = LoggerFactory.getLogger("PriorityRules");
-                ksession.setGlobal("logger", logger);
+                initSession();
 
                 vertx.eventBus().consumer("incident-assignment-event", this::assignmentEvent);
                 vertx.eventBus().consumer("incident-priority", this::incidentPriority);
+                vertx.eventBus().consumer("reset", this::reset);
 
                 future.complete();
             } catch (Exception e) {
                 future.fail(e);
             }
         }));
+    }
+
+    private void initSession() {
+        if (ksession != null) {
+            ksession.dispose();
+        }
+        ksession = kbase.newKieSession();
+        Logger logger = LoggerFactory.getLogger("PriorityRules");
+        ksession.setGlobal("logger", logger);
+    }
+
+    private void reset(Message<JsonObject> message) {
+        log.info("Resetting ksession");
+        initSession();
+        message.reply(new JsonObject());
     }
 
     private void assignmentEvent(Message<JsonObject> message) {

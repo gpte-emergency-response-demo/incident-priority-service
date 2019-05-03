@@ -26,6 +26,7 @@ public class RestApiVerticle extends AbstractVerticle {
                 .register("health", f -> f.complete(Status.OK()));
         router.get("/health").handler(healthCheckHandler);
         router.get("/priority/:incidentId").handler(this::priority);
+        router.post("/reset").handler(this::reset);
 
         return vertx.createHttpServer()
                 .requestHandler(router)
@@ -40,5 +41,10 @@ public class RestApiVerticle extends AbstractVerticle {
                                 .putHeader("content-type", "application/json")
                                 .end(json.body().toString()),
                         rc::fail);
+    }
+
+    private void reset(RoutingContext rc) {
+        vertx.eventBus().rxSend("reset", new JsonObject())
+                .subscribe((json) -> rc.response().setStatusCode(200).end(), rc::fail);
     }
 }
