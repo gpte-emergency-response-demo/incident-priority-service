@@ -76,6 +76,8 @@ public class PriorityRulesTest {
         assertThat(row.get("incidentPriority"), notNullValue());
         assertThat(row.get("incidentPriority"), is(instanceOf(IncidentPriority.class)));
         assertThat(((IncidentPriority)row.get("incidentPriority")).getPriority(), equalTo(1));
+        QueryResults incidents = session.getQueryResults("incidents");
+        assertThat(incidents.size(), equalTo(1));
     }
 
     @Test
@@ -86,6 +88,8 @@ public class PriorityRulesTest {
         session.fireAllRules();
         QueryResults results = session.getQueryResults("incidentPriority", "incident123");
         assertThat(results.size(), equalTo(0));
+        QueryResults incidents = session.getQueryResults("incidents");
+        assertThat(incidents.size(), equalTo(0));
     }
 
     @Test
@@ -99,6 +103,8 @@ public class PriorityRulesTest {
         assertThat(row.get("averagePriority"), notNullValue());
         assertThat(row.get("averagePriority"), is(instanceOf(AveragePriority.class)));
         assertThat(((AveragePriority)row.get("averagePriority")).getAveragePriority(), equalTo(1.0));
+        QueryResults incidents = session.getQueryResults("incidents");
+        assertThat(incidents.size(), equalTo(1));
     }
 
     @Test
@@ -112,6 +118,8 @@ public class PriorityRulesTest {
         assertThat(row.get("averagePriority"), notNullValue());
         assertThat(row.get("averagePriority"), is(instanceOf(AveragePriority.class)));
         assertThat(((AveragePriority)row.get("averagePriority")).getAveragePriority(), equalTo(1.0));
+        QueryResults incidents = session.getQueryResults("incidents");
+        assertThat(incidents.size(), equalTo(1));
     }
 
     @Test
@@ -127,6 +135,8 @@ public class PriorityRulesTest {
         assertThat(row.get("averagePriority"), notNullValue());
         assertThat(row.get("averagePriority"), is(instanceOf(AveragePriority.class)));
         assertThat(((AveragePriority)row.get("averagePriority")).getAveragePriority(), equalTo(0.0));
+        QueryResults incidents = session.getQueryResults("incidents");
+        assertThat(incidents.size(), equalTo(0));
     }
 
     @Test
@@ -142,6 +152,8 @@ public class PriorityRulesTest {
         assertThat(row.get("averagePriority"), notNullValue());
         assertThat(row.get("averagePriority"), is(instanceOf(AveragePriority.class)));
         assertThat(((AveragePriority)row.get("averagePriority")).getAveragePriority(), equalTo(1.0));
+        QueryResults incidents = session.getQueryResults("incidents");
+        assertThat(incidents.size(), equalTo(2));
     }
 
     @Test
@@ -159,6 +171,8 @@ public class PriorityRulesTest {
         assertThat(row.get("averagePriority"), notNullValue());
         assertThat(row.get("averagePriority"), is(instanceOf(AveragePriority.class)));
         assertThat(((AveragePriority)row.get("averagePriority")).getAveragePriority(), equalTo(1.5));
+        QueryResults incidents = session.getQueryResults("incidents");
+        assertThat(incidents.size(), equalTo(2));
     }
 
     @Test
@@ -178,6 +192,8 @@ public class PriorityRulesTest {
         assertThat(row.get("averagePriority"), notNullValue());
         assertThat(row.get("averagePriority"), is(instanceOf(AveragePriority.class)));
         assertThat(((AveragePriority)row.get("averagePriority")).getAveragePriority(), equalTo(2.0));
+        QueryResults incidents = session.getQueryResults("incidents");
+        assertThat(incidents.size(), equalTo(1));
     }
 
     private static KieBase setupKieBase(String... resources) {

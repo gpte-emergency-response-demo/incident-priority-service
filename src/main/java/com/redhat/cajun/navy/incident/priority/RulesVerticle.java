@@ -96,8 +96,10 @@ public class RulesVerticle extends AbstractVerticle {
         } else {
             average = ((AveragePriority)row.get("averagePriority")).getAveragePriority();
         }
+
+        results = ksession.getQueryResults("incidents");
         JsonObject jsonObject = new JsonObject().put("incidentId", incidentId).put("priority", priority)
-                .put("average", average);
+                .put("average", average).put("incidents", results.size());
         message.reply(jsonObject);
     }
 
