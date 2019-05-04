@@ -87,3 +87,7 @@ end
 query "averagePriority"
    averagePriority : AveragePriority( )
 end
+
+query "incidents"
+   incidentPriority: IncidentPriority()
+end

@@ -56,7 +56,7 @@ public class MessageConsumerVerticle extends AbstractVerticle {
                 log.warn("Message of type '" + "' has unexpected structure: " + message.toString());
             }
             String incidentId = message.getJsonObject("body").getString("incidentId");
-            log.info("Consumed '" + messageType + "' message for incident '" + incidentId + "'. Topic: " + msg.topic()
+            log.debug("Consumed '" + messageType + "' message for incident '" + incidentId + "'. Topic: " + msg.topic()
                     + " ,  partition: " + msg.partition() + ", offset: " + msg.offset());
 
             vertx.eventBus().send("incident-assignment-event", body);
