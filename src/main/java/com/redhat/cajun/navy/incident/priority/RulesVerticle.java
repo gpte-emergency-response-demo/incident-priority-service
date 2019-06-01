@@ -35,8 +35,7 @@ public class RulesVerticle extends AbstractVerticle {
 
     @Override
     public Completable rxStart() {
-
-        //init rules
+        
         return Completable.fromMaybe(vertx.<Void>rxExecuteBlocking(future -> {
             try {
                 kbase = setupKieBase("com/redhat/cajun/navy/incident/priority/rules/priority_rules.drl");
